@@ -1,0 +1,34 @@
+services:
+  owntracks-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: owntracks-modern-frontend
+    ports:
+      - "3000:80"
+    environment:
+      # Set the OwnTracks Recorder host URL (without /api path)
+      # Replace with your actual recorder URL
+      - PROXY_TARGET=http://your-recorder:8083
+    restart: unless-stopped
+    networks:
+      - owntracks-network
+
+  # Optional: Include the OwnTracks Recorder if you want an all-in-one setup
+  # owntracks-recorder:
+  #   image: owntracks/recorder
+  #   container_name: owntracks-recorder
+  #   ports:
+  #     - "8083:8083"
+  #   environment:
+  #     - OTR_PORT=0  # Disable MQTT, use HTTP only
+  #   volumes:
+  #     - ./recorder-data/config:/config
+  #     - ./recorder-data/store:/store
+  #   restart: unless-stopped
+  #   networks:
+  #     - owntracks-network
+
+networks:
+  owntracks-network:
+    driver: bridge
