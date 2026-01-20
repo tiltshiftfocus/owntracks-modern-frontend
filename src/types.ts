@@ -1,3 +1,4 @@
+export type DateOrNull = Date | null
 export interface LocationPoint {
   _type: 'location';
   lat: number;

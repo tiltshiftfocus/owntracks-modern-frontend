@@ -21,27 +21,25 @@ export default function DateRangePicker({ dateRange, onDateRangeChange }: DateRa
   const { customDate, setCustomDate } = useOwnTracksStore();
   const [isOpen, setIsOpen] = useState(false);
   const [showCustom, setShowCustom] = useState(false);
-  const [customFromDate, setCustomFromDate] = useState<Date | null>(customDate.from);
-  const [customToDate, setCustomToDate] = useState<Date | null>(customDate.to);
 
   useEffect(() => {
-    setCustomDate(customFromDate, customToDate);
-  }, [customFromDate, customToDate])
+    setCustomDate(customDate.from, customDate.to);
+  }, [customDate.from, customDate.to])
 
   const handlePresetClick = (preset: typeof presetRanges[0]) => {
     if (preset.label === 'Custom') {
       setShowCustom(true);
     } else {
       let dates = preset.getValue();
-      onDateRangeChange(dates);
       setCustomDate(dates.from, dates.to);
+      onDateRangeChange(dates);
       setShowCustom(false);
       setIsOpen(false);
     }
   };
 
   const handleCustomApply = () => {
-    onDateRangeChange({ ...dateRange, from: customFromDate, to: customToDate });
+    onDateRangeChange({ ...dateRange, from: customDate.from, to: customDate.to });
     setIsOpen(false);
   };
 
@@ -95,10 +93,10 @@ export default function DateRangePicker({ dateRange, onDateRangeChange }: DateRa
                 </label>
                 <input
                   type="datetime-local"
-                  value={customFromDate ? format(customFromDate, "yyyy-MM-dd'T'HH:mm") : ''}
+                  value={customDate.from ? format(customDate.from, "yyyy-MM-dd'T'HH:mm") : ''}
                   onChange={(e) => {
                     const date = e.target.value ? new Date(e.target.value) : null;
-                    setCustomFromDate(date);
+                    setCustomDate(date, customDate.to);
                     
                   }}
                   className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -110,17 +108,17 @@ export default function DateRangePicker({ dateRange, onDateRangeChange }: DateRa
                 </label>
                 <input
                   type="datetime-local"
-                  value={customToDate ? format(customToDate, "yyyy-MM-dd'T'HH:mm") : ''}
+                  value={customDate.to ? format(customDate.to, "yyyy-MM-dd'T'HH:mm") : ''}
                   onChange={(e) => {
                     const date = e.target.value ? new Date(e.target.value) : null;
-                    setCustomToDate(date);
+                    setCustomDate(customDate.from, date);
                   }}
                   className="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <button
                 onClick={handleCustomApply}
-                disabled={!customFromDate || !customToDate}
+                disabled={!customDate.from || !customDate.to}
                 className="w-full px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
                 Apply

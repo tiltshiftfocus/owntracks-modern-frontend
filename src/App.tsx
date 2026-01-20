@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { RefreshCw, Loader2, Settings as SettingsIcon, InfoIcon, Menu, X } from 'lucide-react';
-import { subHours } from 'date-fns';
 import MapView from './components/MapView';
 import UserSelector from './components/UserSelector';
 import DeviceSelector from './components/DeviceSelector';
@@ -11,16 +10,16 @@ import Settings from './components/Settings';
 import Info from './components/Info';
 import { useSettings } from './contexts/SettingsContext';
 import type { User, Device, LocationPoint, DateRange, DisplayModes } from './types';
+import { useOwnTracksStore } from './contexts/OwnTracksStore';
 
 function App() {
+  const { customDate } = useOwnTracksStore();
+
   const { api } = useSettings();
   const [users, setUsers] = useState<User[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [selectedDevice, setSelectedDevice] = useState<Device | null>(null);
-  const [dateRange, setDateRange] = useState<DateRange>({
-    from: subHours(new Date(), 12),
-    to: new Date(),
-  });
+  const [dateRange, setDateRange] = useState<DateRange>(customDate);
   const [displayModes, setDisplayModes] = useState<DisplayModes>({
     points: true,
     track: false,
