@@ -10,9 +10,9 @@ interface LocationInfoProps {
 export default function LocationInfo({ location, onClose }: LocationInfoProps) {
   if (!location) return null;
 
-  const timestamp = location.isotst 
-    ? new Date(location.isotst)
-    : new Date(location.tst * 1000);
+  // Always use tst (Unix timestamp in seconds) - it's UTC and reliably converts to local time
+  // isotst from OwnTracks is already in local time, so parsing it causes double timezone offset
+  const timestamp = new Date(location.tst * 1000);
 
   return (
     <div className="absolute bottom-6 left-6 bg-white rounded-lg shadow-xl border border-gray-200 p-4 max-w-sm z-[1000]">

@@ -136,9 +136,8 @@ export default function MapView({ locations, modes, onPointClick, onMapInteracti
           zoomToBoundsOnClick={true}
         >
           {locations.map((location, idx) => {
-            const timestamp = location.isotst
-              ? new Date(location.isotst)
-              : new Date(location.tst * 1000);
+            // Always use tst (Unix timestamp) - isotst parsing causes timezone issues
+            const timestamp = new Date(location.tst * 1000);
 
             return (
               <Marker
