@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Calendar, ChevronDown } from 'lucide-react';
 import { format, subDays, subHours } from 'date-fns';
 import type { DateRange } from '../types';
+import { useOwnTracksStore } from '../contexts/OwnTracksStore';
 
 interface DateRangePickerProps {
   dateRange: DateRange;
@@ -17,16 +18,23 @@ const presetRanges = [
 ];
 
 export default function DateRangePicker({ dateRange, onDateRangeChange }: DateRangePickerProps) {
+  const { customDate, setCustomDate } = useOwnTracksStore();
   const [isOpen, setIsOpen] = useState(false);
   const [showCustom, setShowCustom] = useState(false);
-  const [customFromDate, setCustomFromDate] = useState<Date | null>(new Date());
-  const [customToDate, setCustomToDate] = useState<Date | null>(new Date());
+  const [customFromDate, setCustomFromDate] = useState<Date | null>(customDate.from);
+  const [customToDate, setCustomToDate] = useState<Date | null>(customDate.to);
+
+  useEffect(() => {
+    setCustomDate(customFromDate, customToDate);
+  }, [customFromDate, customToDate])
 
   const handlePresetClick = (preset: typeof presetRanges[0]) => {
     if (preset.label === 'Custom') {
       setShowCustom(true);
     } else {
-      onDateRangeChange(preset.getValue());
+      let dates = preset.getValue();
+      onDateRangeChange(dates);
+      setCustomDate(dates.from, dates.to);
       setShowCustom(false);
       setIsOpen(false);
     }
