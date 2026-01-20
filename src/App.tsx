@@ -11,6 +11,7 @@ import Info from './components/Info';
 import { useSettings } from './contexts/SettingsContext';
 import type { User, Device, LocationPoint, DateRange, DisplayModes } from './types';
 import { useOwnTracksStore } from './contexts/OwnTracksStore';
+import NumberFlow from "@number-flow/react";
 
 function App() {
   const { customDate } = useOwnTracksStore();
@@ -257,7 +258,9 @@ function App() {
             {locations.length > 0 && (
               <div className="bg-white/95 backdrop-blur-sm px-3 py-2 sm:px-4 sm:py-3 rounded-lg shadow-md border border-gray-200 -z-10">
                 <div className="text-xs sm:text-sm text-gray-600">
-                  <span className="font-semibold text-gray-900">{locations.length}</span> location points
+                  <span className="font-semibold text-gray-900">
+                    <NumberFlow value={locations.length}/>
+                  </span> location points
                 </div>
               </div>
             )}

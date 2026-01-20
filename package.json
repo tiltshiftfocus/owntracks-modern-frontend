@@ -9,6 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@number-flow/react": "^0.5.10",
     "date-fns": "^3.0.6",
     "leaflet": "^1.9.4",
     "leaflet.heat": "^0.2.0",
